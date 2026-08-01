@@ -62,13 +62,15 @@ test.describe('Страница конструктора бургера', () => 
     }) => {
       await openApp(page);
 
+      const modal = page.locator('#modals');
+      await expect(modal).toBeEmpty();
+
       await page
         .locator('li')
         .filter({ hasText: BUN_NAME })
         .locator('a')
         .click();
 
-      const modal = page.locator('#modals');
       await expect(modal.getByText('Детали ингредиента')).toBeVisible();
       await expect(modal.getByText(BUN_NAME)).toBeVisible();
       await expect(modal.getByText('Калории, ккал')).toBeVisible();
@@ -103,11 +105,12 @@ test.describe('Страница конструктора бургера', () => 
       const modalRoot = page.locator('#modals');
       await expect(modalRoot.getByText('Детали ингредиента')).toBeVisible();
 
-      await modalRoot.locator('div').first().click({ position: { x: 5, y: 5 } });
+      await modalRoot
+        .locator('div')
+        .first()
+        .click({ position: { x: 5, y: 5 } });
 
-      await expect(
-        modalRoot.getByText('Детали ингредиента')
-      ).not.toBeVisible();
+      await expect(modalRoot.getByText('Детали ингредиента')).not.toBeVisible();
     });
   });
 
@@ -138,9 +141,11 @@ test.describe('Страница конструктора бургера', () => 
       await expect(page.getByText(`${BUN_NAME} (верх)`)).toBeVisible();
       await expect(page.getByText('Выберите начинку')).not.toBeVisible();
 
+      const modal = page.locator('#modals');
+      await expect(modal).toBeEmpty();
+
       await page.getByRole('button', { name: 'Оформить заказ' }).click();
 
-      const modal = page.locator('#modals');
       await expect(modal.getByText('идентификатор заказа')).toBeVisible();
       await expect(modal.getByText(ORDER_NUMBER)).toBeVisible();
 

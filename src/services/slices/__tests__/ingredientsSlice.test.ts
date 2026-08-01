@@ -84,11 +84,7 @@ describe('Редьюсер ingredients', () => {
         ...initialState,
         loading: true
       },
-      fetchIngredients.rejected(
-        new Error('Ошибка сети'),
-        '',
-        undefined
-      )
+      fetchIngredients.rejected(new Error('Ошибка сети'), '', undefined)
     );
 
     expect(state.loading).toBe(false);
